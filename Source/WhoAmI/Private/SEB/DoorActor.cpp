@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CrystalActor.h"
+#include "SEB/DoorActor.h"
 
 // Sets default values
-ACrystalActor::ACrystalActor()
+ADoorActor::ADoorActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,14 +12,14 @@ ACrystalActor::ACrystalActor()
 }
 
 // Called when the game starts or when spawned
-void ACrystalActor::BeginPlay()
+void ADoorActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void ACrystalActor::Tick(float DeltaTime)
+void ADoorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
