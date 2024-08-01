@@ -1,8 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Stairs.generated.h"
 
@@ -10,17 +9,46 @@ UCLASS()
 class WHOAMI_API AStairs : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
 	AStairs();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
 	virtual void Tick(float DeltaTime) override;
 
+	//////////////////// Component ////////////////////////
+	UPROPERTY
+	(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	TArray<UStaticMeshComponent*> meshComponents;
+
+
+	////////////////////// 수집 관련 변수 ////////////////////////
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int waterCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int scrapsCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int stairIndex = 0;
+
+	UPROPERTY(EditAnywhere)
+	TArray<AActor*> StairsActor;
+
+	
+	////////////////////// 수집 관련 함수 ////////////////////////
+	UFUNCTION(BlueprintCallable)
+	void CheckWaterOverlap();
+
+	UFUNCTION(BlueprintCallable)
+	void CheckScrapsOverlap();
+
+	UFUNCTION(BlueprintCallable)
+	void CheckTotalCount();
+
+	UFUNCTION()
+	void ShowNextStair();
 };
