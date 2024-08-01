@@ -38,6 +38,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> StairsActor;
 
+	UPROPERTY(EditAnywhere)
+	class AStairBlock* stairBlock;
 	
 	////////////////////// 수집 관련 함수 ////////////////////////
 	UFUNCTION(BlueprintCallable)

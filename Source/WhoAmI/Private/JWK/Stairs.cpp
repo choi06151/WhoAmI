@@ -1,20 +1,20 @@
 #include "JWK/Stairs.h"
 
 #include "JWK/StairBlock.h"
+#include "Kismet/GameplayStatics.h"
 
 AStairs::AStairs()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempMesh(TEXT("/Script/Engine.StaticMesh'/Game/Crystal_cave/Meshes/Stairs/SM_stairs_01.SM_stairs_01'"));
 
-	for (int i = 0; i < 5; i++)		// n번 계단 meshComp 추가
+	for (int i = 0; i < 5; i++) // n번 계단 meshComp 추가
 	{
-
 		////////////////////////////////////// 계단 //////////////////////////////////////
-		FString meshCompName = FString::Printf(TEXT("meshComp_%d"), i + 1);	// 1번 부터
+		FString meshCompName = FString::Printf(TEXT("meshComp_%d"), i + 1); // 1번 부터
 		UStaticMeshComponent* newMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(*meshCompName);
-		
+
 		if (tempMesh.Succeeded())
 			newMeshComp->SetStaticMesh(tempMesh.Object);
 
@@ -39,6 +39,18 @@ void AStairs::BeginPlay()
 			meshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		}
 	}
+
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AStairBlock::StaticClass(), FoundActors);
+
+	if (FoundActors.Num() > 0)
+	{
+		stairBlock = Cast<AStairBlock>(FoundActors[0]);
+		UE_LOG(LogTemp, Warning, TEXT("stair is not Null!!!!!!!!!!!!! stair is not Null!!!!!!!!!!!!! stair is not Null!!!!!!!!!!!!! stair is not Null!!!!!!!!!!!!!"));
+	}
+
+	if (!stairBlock)
+		UE_LOG(LogTemp, Warning, TEXT("stair is Null!!"));
 }
 
 void AStairs::Tick(float DeltaTime)
@@ -66,11 +78,18 @@ void AStairs::CheckTotalCount()
 {
 	int totalCount = waterCount + scrapsCount;
 
-	if(totalCount % 2 == 0 && totalCount <= 10)
-	{
+	if (totalCount % 2 == 0 && totalCount <= 10)
 		ShowNextStair();
+
+	if(totalCount > 3 && totalCount % 2 == 0)
+	{
+		if (stairBlock)
+			stairBlock->OpenBlock();
+
+		else
+			UE_LOG(LogTemp, Warning, TEXT("stairBlock is null!!! stairBlock is null!!! stairBlock is null!!! stairBlock is null!!!"));
 	}
-	
+
 	// 엔딩 조건 체크
 	if (totalCount == 10)
 	{
@@ -99,11 +118,11 @@ void AStairs::CheckTotalCount()
 
 void AStairs::ShowNextStair()
 {
-	if(stairIndex < meshComponents.Num())
+	if (stairIndex < meshComponents.Num())
 	{
 		UStaticMeshComponent* nextStair = meshComponents[stairIndex];
 
-		if(nextStair)
+		if (nextStair)
 		{
 			// 계단을 활성화
 			nextStair->SetVisibility(true);
