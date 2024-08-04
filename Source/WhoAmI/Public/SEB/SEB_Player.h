@@ -18,6 +18,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	//충돌처리
+	UFUNCTION()
+	void OnMyCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 public:	
 	// Called every frame
@@ -29,28 +33,28 @@ public:
 	UPROPERTY(Category=Character, VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	TObjectPtr<UCapsuleComponent> SEBCapsuleComponent;
 
-	//충돌처리
-	UFUNCTION()
-	void OnMyCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
+	
 	bool isHold = false;
-	bool isPutDown = false;
 private:
-
-	UPROPERTY()
-	class ATextActor* TextActorInstance;
 
 	UPROPERTY()
 	class ACrystalActor* CrystalActorInstance;
 
 	AActor* Text;
+
+	UPROPERTY()
+	class ATextActor* TextActorInstance;
 	
+
+	AActor* Grinder;
+	
+	UPROPERTY()
+	class AGrinderActor* GrinderActorInstance;
+
+
 	void OnClickAButton();
 
 	void OnClickPutDownButton();
-
-	UPROPERTY()
-	class AGrinderActor* GrinderActorInstance;
 	
-	AActor* Grinder;
+	
 };

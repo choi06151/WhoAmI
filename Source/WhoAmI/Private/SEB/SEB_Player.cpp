@@ -28,7 +28,6 @@ void ASEB_Player::BeginPlay()
 	
 	TSubclassOf<AActor> ActorClass = ATextActor::StaticClass();
 	Text  = UGameplayStatics::GetActorOfClass(GetWorld(), ActorClass);
-
 	TextActorInstance = Cast<ATextActor>(Text);
 
 	TSubclassOf<AActor> GrinderActorClass = AGrinderActor::StaticClass();
@@ -56,48 +55,29 @@ void ASEB_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 void ASEB_Player::OnMyCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	/*if ( OtherActor->IsA<ACrystalActor>() )
-	{
-		UE_LOG(LogTemp, Error, TEXT("ACrystalActor"));
-		CrystalActorInstance = Cast<ACrystalActor>(OtherActor);
-		
-		CrystalActorInstance->DestroyCrystal();
-		
-	}*/
+	
 }
 
 void ASEB_Player::OnClickAButton()
 {
-	UE_LOG(LogTemp, Error,  TEXT("눌렸다") );
 	if (Text)
 	{
-		UE_LOG(LogTemp, Error,  TEXT("눌렸다22") );
-		//TextActorInstance->InfoText->SetText(FText::FromString("가나다"));
 		TextActorInstance->ClickAButton();
 	}
 }
 
 void ASEB_Player::OnClickPutDownButton()   
 {
-	UE_LOG(LogTemp, Error, TEXT("2번 버튼이 눌렸다."));
-	if(isHold) // 크리스탈을 잡고 있다면
+	if(isHold)
 	{
 		if(GrinderActorInstance->isCheck)
 		{
-			UE_LOG(LogTemp, Error, TEXT("크리스탈도 잡고, 그라인더 앞에 있구나."));
 			isHold = false;
-			UE_LOG(LogTemp, Error, TEXT("isHold : %d"), isHold);
 			GrinderActorInstance->IncrementGauge();
 		}
-		else
-		{
-			UE_LOG(LogTemp, Error, TEXT("크리스탈은 잡았지만 그라인더 앞에 있지 않구나"));
-		}
+		
 	}
 	
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("아직 크리스탈을 잡지 않았잖아 너"));
-	}
+	
 }
 

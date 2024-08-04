@@ -27,13 +27,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UTextRenderComponent* InfoText;
 
-
-	
-	void ClickAButton();
-
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UMaterial> textMtr;
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UFont> textFont;
+
+
+	void ClickAButton();
 };

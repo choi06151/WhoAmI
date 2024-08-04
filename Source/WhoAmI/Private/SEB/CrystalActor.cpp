@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "SEB/GaugeActor.h"
 #include "SEB/SEB_Player.h"
+#include "SEB/TextActor.h"
 
 
 // Sets default values
@@ -27,7 +28,10 @@ void ACrystalActor::BeginPlay()
 	Super::BeginPlay();
 	CrystalComp->OnComponentBeginOverlap.AddDynamic(this, &ACrystalActor::OnMyCompBeginOverlap);
 
-	
+
+	TSubclassOf<AActor> ActorClass = ATextActor::StaticClass();
+	Text  = UGameplayStatics::GetActorOfClass(GetWorld(), ActorClass);
+	TextActorInstance = Cast<ATextActor>(Text);
 }
 
 // Called every frame
@@ -40,13 +44,14 @@ void ACrystalActor::Tick(float DeltaTime)
 void ACrystalActor::OnMyCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if ( OtherActor->IsA<ASEB_Player>() ) // 플레이어랑 크리스탈이랑 충돌하면
+	if ( OtherActor->IsA<ASEB_Player>() )
 	{
-		//이거 나중에 플레이어에서 가져오기
 		ASEB_Player* player = Cast<ASEB_Player>(OtherActor);
-		player->isHold = true; // 크리스탈을 잡고있다는 것을 표시
-		UE_LOG(LogTemp, Error, TEXT("크리스탈을 집었다!"));
-		//IncrementGauge();
+		player->isHold = true;
+
+		FString InfoText = TEXT("수집한 광석을 \n 그라인더에 올려주세요.");
+		TextActorInstance->InfoText->SetText(FText::FromString(InfoText));
+
 		//DestroyCrystal();
 		
 	}

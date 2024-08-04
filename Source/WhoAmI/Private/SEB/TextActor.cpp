@@ -22,8 +22,8 @@ ATextActor::ATextActor()
 void ATextActor::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	FString Text = TEXT("A버튼을 눌러 \n 곡괭이를 획득하세요.");
-
 	InfoText->SetText(FText::FromString(Text));
 }
 
@@ -39,7 +39,6 @@ void ATextActor::ClickAButton()
 	if(InfoText)
 	{
 		FString Text = TEXT("곡괭이를 이용하여 \n 오른쪽의 광석을 수집하세요.");
-
 		InfoText->SetText(FText::FromString(Text));
 	}
 	

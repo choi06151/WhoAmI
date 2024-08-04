@@ -19,7 +19,14 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	//충돌처리
+	UFUNCTION()
+	void OnMyCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+
+	void DestroyCrystal();
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -27,19 +34,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBoxComponent* CrystalComp;
-
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* Crystal;
-
-	//충돌처리
-	UFUNCTION()
-	void OnMyCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-
 	
+	AActor* Text;
 	
-	void DestroyCrystal();
+	UPROPERTY()
+	class ATextActor* TextActorInstance;
 
 	
 
