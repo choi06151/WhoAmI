@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TextRenderComponent.h"
 #include "GameFramework/Actor.h"
 #include "GaugeActor.generated.h"
 
@@ -23,12 +24,20 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTextRenderComponent* GaugeText;
 
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<class UUserWidget> WidgetClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTextRenderComponent* MaxGaugeText;
+
+	void OpenDoor(float DeltaTime);
+
+	AActor* Door;
 	
-private:
-	UPROPERTY()
-	class UWidgetComponent* WidgetComponent;
+	FVector StartPosition;
+	FVector TargetPosition;
+
+	float DoorOpeningSpeed = 1000.0f;
+	bool bIsOpening = false;
 
 };
