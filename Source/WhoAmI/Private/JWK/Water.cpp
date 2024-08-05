@@ -21,7 +21,7 @@ AWater::AWater()
 		meshComp->SetStaticMesh(tempMesh.Object);
 
 	FloatAmplitude = 10.0f; // 진폭
-	FloatFrequency = 0.3f; // 주기
+	FloatFrequency = 2.0f; // 주기
 }
 
 void AWater::BeginPlay()

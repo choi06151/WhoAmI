@@ -1,5 +1,6 @@
 #include "JWK/Stairs.h"
 
+#include "JWK/CountInformation.h"
 #include "JWK/ExitActor.h"
 #include "JWK/StairBlock.h"
 #include "Kismet/GameplayStatics.h"
@@ -72,6 +73,20 @@ void AStairs::BeginPlay()
 
 	if (!exitActor)
 		UE_LOG(LogTemp, Warning, TEXT("exit is Null!!"));
+
+	
+	// CountInformation Cast
+	TArray<AActor*> FoundActors2;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACountInformation::StaticClass(), FoundActors2);
+
+	if (FoundActors2.Num() > 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("CountInformation is not Null!!"));
+		CountInformationActor = Cast<ACountInformation>(FoundActors2[0]);
+	}
+
+	if (!CountInformationActor)
+		UE_LOG(LogTemp, Warning, TEXT("CountInformation is Null!!"));
 }
 
 void AStairs::Tick(float DeltaTime)
@@ -85,6 +100,9 @@ void AStairs::CheckWaterOverlap()
 	UE_LOG(LogTemp, Warning, TEXT("waterCount : %d"), waterCount);
 
 	CheckTotalCount();
+
+	if (CountInformationActor)
+		CountInformationActor->UpdateCounts(waterCount, scrapsCount);
 }
 
 void AStairs::CheckScrapsOverlap()
@@ -93,6 +111,9 @@ void AStairs::CheckScrapsOverlap()
 	UE_LOG(LogTemp, Warning, TEXT("scrapsCount : %d"), scrapsCount);
 
 	CheckTotalCount();
+
+	if (CountInformationActor)
+		CountInformationActor->UpdateCounts(waterCount, scrapsCount);
 }
 
 void AStairs::CheckTotalCount()
@@ -100,6 +121,9 @@ void AStairs::CheckTotalCount()
 	int totalCount = waterCount + scrapsCount;
 
 	UE_LOG(LogTemp, Warning, TEXT("Total Count : %d"), totalCount);
+
+	if (CountInformationActor)
+		CountInformationActor->UpdateCounts(waterCount, scrapsCount);
 	
 	// 총 수집 개수가 2개, 4개, 6개, 8개, 10개 일 때 출구호 향하는 계단이 나타남
 	if (totalCount % 2 == 0 && totalCount <= 10)

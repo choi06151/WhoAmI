@@ -44,6 +44,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnCheckClearChanged OnCheckClearChanged;
 
+
+	/////////////////////////////// 소리 ///////////////////////////////
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundBase* FirstEndingSound; // 첫 번째 엔딩 사운드
 
@@ -53,6 +55,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundBase* ToiletFlushSound; // 물 내리는 소리
 
+	/////////////////////////////// 카운트 ///////////////////////////////
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Information")
+	class ACountInformation* CountInformationActor;
+	
 	/////////////////////////////// 함수 ///////////////////////////////
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

@@ -25,12 +25,15 @@ public:
 
 
 	////////////////////// 수집 관련 변수 ////////////////////////
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Information")
 	int waterCount = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Information")
 	int scrapsCount = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Information")
+	class ACountInformation* CountInformationActor;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int stairIndex = 0;
 
