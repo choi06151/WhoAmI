@@ -9,7 +9,8 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine"
+				"Engine",
+				"UMG"
 			]
 		}
 	],
@@ -51,8 +52,12 @@
 			]
 		},
 		{
-			"Name": "Water",
-			"Enabled": true
+			"Name": "OculusPlatform",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Android"
+			]
 		}
 	],
 	"TargetPlatforms": [
