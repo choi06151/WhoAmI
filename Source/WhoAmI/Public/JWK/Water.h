@@ -27,14 +27,21 @@ public:
 	class UStaticMeshComponent* meshComp;
 
 	/////////////////////////////////////////////////////////
-	// UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	// class UCollection_Component* collection;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class AStairs* stair;
 	
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	class USoundWave* waterSound;
 	
+private:
+	UPROPERTY(EditAnywhere, Category = "Floating")
+	float FloatAmplitude; // 진폭
+
+	UPROPERTY(EditAnywhere, Category = "Floating")
+	float FloatFrequency; // 주기
+
+	FVector InitialLocation;
 };

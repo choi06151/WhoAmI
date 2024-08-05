@@ -1,5 +1,6 @@
 #include "JWK/Stairs.h"
 
+#include "JWK/ExitActor.h"
 #include "JWK/StairBlock.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -24,12 +25,18 @@ AStairs::AStairs()
 		newMeshComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		/////////////////////////////////////////////////////////////////////////////////
 	}
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempCaveSound(TEXT("/Script/Engine.SoundWave'/Game/JWK/Sound/Cave_Sound.Cave_Sound'"));
+	if (tempCaveSound.Succeeded())
+		caveSound = tempCaveSound.Object;
 }
 
 void AStairs::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UGameplayStatics::PlaySound2D(this, caveSound, 0.3f);
+	
 	// 게임이 시작될 때 모든 메시를 비활성화
 	for (UStaticMeshComponent* meshComp : meshComponents)
 	{
@@ -40,6 +47,7 @@ void AStairs::BeginPlay()
 		}
 	}
 
+	// Stair Block Cast
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AStairBlock::StaticClass(), FoundActors);
 
@@ -51,6 +59,19 @@ void AStairs::BeginPlay()
 
 	if (!stairBlock)
 		UE_LOG(LogTemp, Warning, TEXT("stair is Null!!"));
+
+
+	// Exit Cast
+	exitActor = Cast<AExitActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AExitActor::StaticClass()));
+
+	if (exitActor)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ExitActor is not Null!!"));
+		exitActor->OnCheckClearChanged.AddDynamic(this, &AStairs::CheckTotalCount);
+	}
+
+	if (!exitActor)
+		UE_LOG(LogTemp, Warning, TEXT("exit is Null!!"));
 }
 
 void AStairs::Tick(float DeltaTime)
@@ -78,13 +99,17 @@ void AStairs::CheckTotalCount()
 {
 	int totalCount = waterCount + scrapsCount;
 
+	UE_LOG(LogTemp, Warning, TEXT("Total Count : %d"), totalCount);
+	
+	// 총 수집 개수가 2개, 4개, 6개, 8개, 10개 일 때 출구호 향하는 계단이 나타남
 	if (totalCount % 2 == 0 && totalCount <= 10)
 		ShowNextStair();
 
-	if(totalCount > 3 && totalCount % 2 == 0)
+	// 계단이 나타나고 다음 계단이 나타나기 전에 플레이어가 떨어지는 걸 방지하기 위해 보이지않는 벽의 Collision을 관리함
+	if (totalCount > 3 && totalCount % 2 == 0)
 	{
 		if (stairBlock)
-			stairBlock->OpenBlock();
+			stairBlock->OpenBlock(); // 보이지 않는 벽의 Collision을 NoCollision으로
 
 		else
 			UE_LOG(LogTemp, Warning, TEXT("stairBlock is null!!! stairBlock is null!!! stairBlock is null!!! stairBlock is null!!!"));
@@ -98,6 +123,11 @@ void AStairs::CheckTotalCount()
 			UE_LOG(LogTemp, Warning, TEXT("Unbalanced. Water is more than Scraps"));
 
 			// 1. 설사 엔딩
+			if (exitActor)
+			{
+				exitActor->bFirstEnding = true;
+				exitActor->SetCheckClear(true);
+			}
 		}
 
 		else if (scrapsCount >= 7) // 많은 찌꺼기, 적은 수분
@@ -105,6 +135,11 @@ void AStairs::CheckTotalCount()
 			UE_LOG(LogTemp, Warning, TEXT("Unbalanced. Scrap is more than Water"));
 
 			// 2. 변비 엔딩
+			if (exitActor)
+			{
+				exitActor->bSecondEnding = true;
+				exitActor->SetCheckClear(true);
+			}
 		}
 
 		if (waterCount == 5 && scrapsCount == 5)
@@ -112,6 +147,11 @@ void AStairs::CheckTotalCount()
 			UE_LOG(LogTemp, Warning, TEXT("Very Good!!! Very Good!!! Very Good!!! Very Good!!! Very Good!!! "))
 
 			// 3. 쾌변 엔딩
+			if (exitActor)
+			{
+				exitActor->bThirdEnding = true;
+				exitActor->SetCheckClear(true);
+			}
 		}
 	}
 }
@@ -128,6 +168,12 @@ void AStairs::ShowNextStair()
 			nextStair->SetVisibility(true);
 			nextStair->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
+			// 랜덤 사운드 재생
+			if (stairSounds.Num() > 0)
+			{
+				int32 RandomIndex = FMath::RandRange(0, stairSounds.Num() - 1);
+				UGameplayStatics::PlaySoundAtLocation(this, stairSounds[RandomIndex], GetActorLocation());
+			}
 			// 다음 계단 인덱스로 이동
 			stairIndex++;
 		}

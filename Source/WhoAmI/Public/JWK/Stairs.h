@@ -20,8 +20,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	//////////////////// Component ////////////////////////
-	UPROPERTY
-	(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	TArray<UStaticMeshComponent*> meshComponents;
 
 
@@ -40,6 +39,15 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class AStairBlock* stairBlock;
+
+	UPROPERTY(EditAnywhere)
+	class AExitActor* exitActor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	TArray<USoundWave*> stairSounds;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	class USoundBase* caveSound;
 	
 	////////////////////// 수집 관련 함수 ////////////////////////
 	UFUNCTION(BlueprintCallable)
