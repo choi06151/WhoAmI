@@ -50,4 +50,9 @@ public:
 	TObjectPtr<UMaterial> GaugeBarMaterial;
 
 	bool isCheck = false;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	TSubclassOf<AActor> spawnCrystal;
+	
+	void PutCrystal();
 };

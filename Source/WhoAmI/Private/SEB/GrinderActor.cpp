@@ -39,11 +39,7 @@ void AGrinderActor::OnMyCompBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	if ( OtherActor->IsA<ASEB_Player>() )
 	{
 		isCheck = true;
-		UE_LOG(LogTemp, Error, TEXT("그라인더 앞에 있다."));
 		ASEB_Player* player = Cast<ASEB_Player>(OtherActor); 
-		//player->isPutDown = true;
-		
-		
 	}
 }
 
@@ -53,10 +49,6 @@ void AGrinderActor::OnMyCompEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	if ( OtherActor->IsA<ASEB_Player>() )
 	{
 		isCheck = false;
-		UE_LOG(LogTemp, Error, TEXT("그라인더 앞에 있다."));
-		
-		
-		
 	}
 }
 
@@ -84,4 +76,12 @@ void AGrinderActor::IncrementGauge()
 	{
 		UE_LOG(LogTemp, Error, TEXT("오류나써염"));
 	}
+}
+
+void AGrinderActor::PutCrystal()
+{
+	FVector Location = GetActorLocation();
+	FRotator Rotation = GetActorRotation();
+
+	AActor* crystal = GetWorld()->SpawnActor<AActor>(spawnCrystal, FVector(Location.X + 70, Location.Y, Location.Z), Rotation);
 }

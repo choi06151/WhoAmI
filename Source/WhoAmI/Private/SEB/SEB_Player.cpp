@@ -74,6 +74,7 @@ void ASEB_Player::OnClickPutDownButton()
 		{
 			isHold = false;
 			GrinderActorInstance->IncrementGauge();
+			GrinderActorInstance->PutCrystal();
 		}
 		
 	}
